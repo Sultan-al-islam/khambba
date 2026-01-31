@@ -23,9 +23,9 @@ function resizeCanvas() {
 
     // Dynamic Physics Scaling
     // Faster, Snappier Physics
-    gravity = canvas.height * 0.0008; // Increased from 0.0006
-    lift = canvas.height * -0.016;    // Increased from 0.013
-    player.x = canvas.width * 0.15; // Player stays 15% from left
+    gravity = canvas.height * 0.00095; 
+    lift = canvas.height * -0.016;    
+    player.x = canvas.width * 0.15; 
 
     if (!gameStarted) player.y = canvas.height / 2;
 }
