@@ -177,7 +177,7 @@ function draw() {
         // Link Button
         const btnX = canvas.width / 2 - linkBtn.w / 2;
         const btnY = canvas.height / 2 + 70;
-        ctx.fillStyle = "#e67e22";
+        ctx.fillStyle = "#e62f22";
         ctx.beginPath();
         ctx.roundRect(btnX, btnY, linkBtn.w, linkBtn.h, 10);
         ctx.fill();
