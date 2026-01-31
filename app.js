@@ -160,7 +160,7 @@ function draw() {
 
     if (!gameStarted && !gameOver) {
         ctx.font = "bold 40px Arial";
-        ctx.fillText("KHAMBA TAREK", canvas.width / 2, canvas.height / 2);
+        ctx.fillText("খাম্বা তারেক", canvas.width / 2, canvas.height / 2);
         ctx.font = "20px Arial";
         ctx.fillText("TAP TO FLY", canvas.width / 2, canvas.height / 2 + 50);
     }
