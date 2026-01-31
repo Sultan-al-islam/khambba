@@ -183,7 +183,7 @@ function draw() {
         ctx.fill();
         ctx.fillStyle = "white";
         ctx.font = "bold 20px Arial";
-        ctx.fillText("To know Plan", canvas.width / 2, btnY + 32);
+        ctx.fillText("His Plan", canvas.width / 2, btnY + 32);
     }
 }
 
