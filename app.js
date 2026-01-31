@@ -7,24 +7,21 @@ let gravity, lift, velocity = 0, score = 0;
 let gameOver = false, gameStarted = false, frame = 0;
 let pipes = [];
 const pipeWidth = 80;
-const gapHeight = 280;
+const gapHeight = 300; // Increased gap for easier play
 
 const playerImg = new Image();
-playerImg.src = "player.png"; // Ensure this file exists
+playerImg.src = "player.png"; 
 const player = { x: 0, y: 0, width: 100, height: 80 };
 
 const linkBtn = { w: 220, h: 50, url: "https://bnpnama.info/" };
-
-// 
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Dynamic Physics Scaling
-    // Faster, Snappier Physics
-    gravity = canvas.height * 0.00095; 
-    lift = canvas.height * -0.016;    
+    // SLOW MOTION PHYSICS SETTINGS
+    gravity = canvas.height * 0.0006; // Lower gravity = floaty feel
+    lift = canvas.height * -0.012;    // Lower lift = gentler jumps
     player.x = canvas.width * 0.15; 
 
     if (!gameStarted) player.y = canvas.height / 2;
@@ -46,17 +43,15 @@ function createPipe() {
 }
 
 function handleInput() {
-    if (gameOver) {
-        // Check if the restart was triggered by a click outside the link button
-        // handled in the mousedown event
-    } else {
-        if (!gameStarted) {
-            gameStarted = true;
-            bgm.play().catch(() => console.log("Audio needs user interaction"));
-            bgm.volume = 0.4;
-        }
-        velocity = lift;
+    if (gameOver) return;
+
+    if (!gameStarted) {
+        gameStarted = true;
+        bgm.play().catch(() => console.log("Audio needs user interaction"));
+        bgm.volume = 0.4;
     }
+    // Set velocity to lift immediately so the first tap jumps
+    velocity = lift;
 }
 
 // Input Listeners
@@ -109,11 +104,12 @@ function update() {
     }
 
     pipes.forEach(pipe => {
-        pipe.x -= (canvas.width * 0.006); // Pipe speed scales with width
+        // SLOWER HORIZONTAL SPEED
+        pipe.x -= (canvas.width * 0.004); 
 
-        // Collision: Khambas (Poles)
-        if (player.x + player.width - 15 > pipe.x && player.x + 15 < pipe.x + pipeWidth &&
-            (player.y + 15 < pipe.top || player.y + player.height - 15 > canvas.height - pipe.bottom)) {
+        // Collision Logic
+        if (player.x + player.width - 20 > pipe.x && player.x + 20 < pipe.x + pipeWidth &&
+            (player.y + 20 < pipe.top || player.y + player.height - 20 > canvas.height - pipe.bottom)) {
             gameOver = true;
             bgm.pause();
         }
@@ -125,31 +121,29 @@ function update() {
     });
 
     pipes = pipes.filter(p => p.x + pipeWidth > 0);
-    if (frame % 80 === 0) createPipe();
+    
+    // SPAWN PIPES LESS FREQUENTLY (to match slow speed)
+    if (frame % 120 === 0) createPipe(); 
     frame++;
 }
 
 function draw() {
-    // Gradient Sky
     let g = ctx.createLinearGradient(0, 0, 0, canvas.height);
     g.addColorStop(0, "#2980b9");
     g.addColorStop(1, "#6dd5fa");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Drawing Khambas
     pipes.forEach(pipe => {
         ctx.fillStyle = "#2c3e50";
         ctx.fillRect(pipe.x + pipeWidth / 2 - 8, 0, 16, pipe.top);
-        ctx.fillRect(pipe.x, pipe.top - 20, pipeWidth, 12); // Cross-arm
+        ctx.fillRect(pipe.x, pipe.top - 20, pipeWidth, 12); 
         ctx.fillRect(pipe.x + pipeWidth / 2 - 8, canvas.height - pipe.bottom, 16, pipe.bottom);
         ctx.fillRect(pipe.x, canvas.height - pipe.bottom + 10, pipeWidth, 12);
     });
 
-    // Player
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
 
-    // UI
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
 
@@ -174,7 +168,6 @@ function draw() {
         ctx.font = "24px Arial";
         ctx.fillText("Score: " + score, canvas.width / 2, canvas.height / 2 + 10);
 
-        // Link Button
         const btnX = canvas.width / 2 - linkBtn.w / 2;
         const btnY = canvas.height / 2 + 70;
         ctx.fillStyle = "#e62f22";
